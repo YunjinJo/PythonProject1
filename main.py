@@ -2,8 +2,12 @@
 from tkinter import*
 #def로 함수 정의 시작
 #함수는 ()이 있어야 한다, (매개변수 넣을 수 있다): 후 들여쓰기 필수
+#파이썬 자료형
+#int, bool, float, str
+#list, tuple, set, dict
 def process():
-    e2.insert(0, "환율: 1달러 = 1200원")
+    dollar = float(e1.get())    #e1 엔트리에 있는 문자열을 읽어서 float로 변환
+    e2.insert(0, str(dollar*1200))
 
 window = Tk()
 l1 = Label(window, text = "달러")
