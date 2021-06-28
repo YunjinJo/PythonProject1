@@ -30,7 +30,7 @@ b2.grid(row=2, column =1)
 b1.configure(font = 'helvetica 12')
 b2["bg"] = "green"
 """
-window = Tk()
+"""
 l1 = Label(window, text = "김영식", bg = "red", fg = "white", font = 'helvetica 16 italic')
 l2 = Label(window, text = "이재영", bg = "green", fg = "white")
 l3 = Label(window, text = "장지웅", bg = "blue", fg = "white")
@@ -43,4 +43,20 @@ l3 = Label(window, text = "장지웅", bg = "blue", fg = "white")
 l1.place(x = 0, y = 0)
 l2.place(x = 100, y = 30)
 l3.place(x = 200, y = 60)
+"""
+def change_img():
+    path = inputBox.get() # 엔트리에서 물자열을 읽어서 path 변수에 넣는다.
+    img = PhotoImage(file = path)
+    imageLabel.configure(image = img)
+    imageLabel.image = img
+
+window = Tk()
+photo = PhotoImage(file = "우주소녀.gif")   #디폴트 이미지 파일
+#Label 위젯을 만들때 text와 image를 지정할 수 있다.
+imageLabel = Label(window, image = photo)   #나중에 안쓰면 이름 안 받아도 된다. Label(window, image = photo).pack() 으로 사용
+imageLabel.pack()
+inputBox = Entry(window)
+inputBox.pack()
+Button(window, text = '클릭', command = change_img).pack()
+
 window.mainloop()
