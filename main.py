@@ -1,62 +1,55 @@
-#tkinter 모듈에 있는 모든 함수 클래스를 포함
 from tkinter import*
-#def로 함수 정의 시작
-#함수는 ()이 있어야 한다, (매개변수 넣을 수 있다): 후 들여쓰기 필수
-#파이썬 자료형
-#int, bool, float, str
-#list, tuple, set, dict
+#전역변수
+w = 400
+h = 300
+#객체지향 언어 class
+class Ball:
+    def __init__(self):#Ball 클래스 생성자
+        self.x = 10 #멤버변수
+        self.y = 10 #멤버변수
 
-"""
-def process():
-    dollar = float(e1.get())    #e1 엔트리에 있는 문자열을 읽어서 float로 변환
-    e2.insert(0, str(dollar*1200))
+class MainGUI:#class : 키워드, MAinGUI (클래스 이름)
+    def up(self):
+        if self.ball.y > 5: #if 조건문
+            self.ball.y -= 5 #y값을 5 감소, 즉 위로 5 이동
+            self.canvas.delete('ball') #Canvas 에 그린 객체 중에서 tags가 'ball'인 객체를 지운다.
+            self.canvas.create_oval(self.ball.x - 5, self.ball.y - 5, self.ball.x + 5, self.ball.y + 5,
+                                    fill='red', tags='ball')
 
+    def down(self):
+        if self.ball.y < h-5:  # if 조건문
+            self.ball.y += 5  # y값을 5 증가, 즉 아래로 5 이동
+            self.canvas.delete('ball')  # Canvas 에 그린 객체 중에서 tags가 'ball'인 객체를 지운다.
+            self.canvas.create_oval(self.ball.x - 5, self.ball.y - 5, self.ball.x + 5, self.ball.y + 5,
+                                    fill='red', tags='ball')
+    def left(self):
+        if self.ball.x > 5:  # if 조건문
+            self.ball.x -= 5  # x값을 5 감소, 즉 왼쪽으로 5 이동
+            self.canvas.delete('ball')  # Canvas 에 그린 객체 중에서 tags가 'ball'인 객체를 지운다.
+            self.canvas.create_oval(self.ball.x - 5, self.ball.y - 5, self.ball.x + 5, self.ball.y + 5,
+                                    fill='red', tags='ball')
+    def right(self):
+        if self.ball.x < w-5:  # if 조건문
+            self.ball.x += 5  # x값을 5 증가, 즉 오른쪽으로 5 이동
+            self.canvas.delete('ball')  # Canvas 에 그린 객체 중에서 tags가 'ball'인 객체를 지운다.
+            self.canvas.create_oval(self.ball.x - 5, self.ball.y - 5, self.ball.x + 5, self.ball.y + 5,
+                                    fill='red', tags='ball')
 
-l1 = Label(window, text = "달러", font = 'helvetica 16 italic')
-l2 = Label(window, text = '원', font = 'helvetica 16 italic')
-l1.grid(row=0, column =0) #격자배치 0행 0열
-l2.grid(row=1, column =0) #격자배치 1행 0열
+    def __init__(self):#생성자
+        window = Tk()
+        window.title('공 옮기기')
+        self.canvas = Canvas(window, width = w, height = h, bg = 'white') #self를 붙이면 멤버 변수가 되어 다른 곳에서도 쓸 수 있다, 안붙이면 로컬 변수
+        self.canvas.pack() #압축배치
+        self.ball = Ball() #Ball 클래스 객체 생성
+        self.canvas.create_oval(self.ball.x-5,self.ball.y-5,self.ball.x+5,self.ball.y+5,
+                                fill = 'red', tags = 'ball') #(x1,y1), (x2,y2) 두 점을 갖는 직사각형에 꽉차는 타원을 그린다.
+        #버튼 4개를 감싸는 containter 위젯 Frame 생성
+        frame = Frame(window)
+        frame.pack()
+        Button(frame, text = '상', command = self.up).pack(side = LEFT)
+        Button(frame, text='하', command=self.down).pack(side = LEFT)
+        Button(frame, text='좌', command=self.left).pack(side = LEFT)
+        Button(frame, text='우', command=self.right).pack(side = LEFT)
+        window.mainloop()
 
-e1 = Entry(window, bg = 'yellow', fg = 'black')
-e2 = Entry(window, background = 'blue', foreground = 'white')
-e1.grid(row=0, column =1) #격자배치 0행 1열
-e2.grid(row=1, column =1) #격자배치 1행 1열
-
-
-b1 = Button(window,text = '달러 -> 원', command = process) #button 이라는 이름의 버튼 위젯을 window에 생성
-b2 = Button(window,text = '원 -> 달러')
-b1.grid(row=2, column =0)
-b2.grid(row=2, column =1)
-b1.configure(font = 'helvetica 12')
-b2["bg"] = "green"
-"""
-"""
-l1 = Label(window, text = "김영식", bg = "red", fg = "white", font = 'helvetica 16 italic')
-l2 = Label(window, text = "이재영", bg = "green", fg = "white")
-l3 = Label(window, text = "장지웅", bg = "blue", fg = "white")
-
-#윈도우 좌표계
-#원점위치 (0,0) = 좌측 상단
-#x축 왼쪽 -> 오른쪽 증가
-#y축 위쪽 -> 아래쪽 증가
-
-l1.place(x = 0, y = 0)
-l2.place(x = 100, y = 30)
-l3.place(x = 200, y = 60)
-"""
-def change_img():
-    path = inputBox.get() # 엔트리에서 물자열을 읽어서 path 변수에 넣는다.
-    img = PhotoImage(file = path)
-    imageLabel.configure(image = img)
-    imageLabel.image = img
-
-window = Tk()
-photo = PhotoImage(file = "우주소녀.gif")   #디폴트 이미지 파일
-#Label 위젯을 만들때 text와 image를 지정할 수 있다.
-imageLabel = Label(window, image = photo)   #나중에 안쓰면 이름 안 받아도 된다. Label(window, image = photo).pack() 으로 사용
-imageLabel.pack()
-inputBox = Entry(window)
-inputBox.pack()
-Button(window, text = '클릭', command = change_img).pack()
-
-window.mainloop()
+MainGUI()#class 객체 생성 (생성자 호출)
