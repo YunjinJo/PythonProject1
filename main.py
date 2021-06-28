@@ -5,11 +5,13 @@ from tkinter import*
 #파이썬 자료형
 #int, bool, float, str
 #list, tuple, set, dict
+
+"""
 def process():
     dollar = float(e1.get())    #e1 엔트리에 있는 문자열을 읽어서 float로 변환
     e2.insert(0, str(dollar*1200))
 
-window = Tk()
+
 l1 = Label(window, text = "달러", font = 'helvetica 16 italic')
 l2 = Label(window, text = '원', font = 'helvetica 16 italic')
 l1.grid(row=0, column =0) #격자배치 0행 0열
@@ -27,4 +29,18 @@ b1.grid(row=2, column =0)
 b2.grid(row=2, column =1)
 b1.configure(font = 'helvetica 12')
 b2["bg"] = "green"
+"""
+window = Tk()
+l1 = Label(window, text = "김영식", bg = "red", fg = "white", font = 'helvetica 16 italic')
+l2 = Label(window, text = "이재영", bg = "green", fg = "white")
+l3 = Label(window, text = "장지웅", bg = "blue", fg = "white")
+
+#윈도우 좌표계
+#원점위치 (0,0) = 좌측 상단
+#x축 왼쪽 -> 오른쪽 증가
+#y축 위쪽 -> 아래쪽 증가
+
+l1.place(x = 0, y = 0)
+l2.place(x = 100, y = 30)
+l3.place(x = 200, y = 60)
 window.mainloop()
