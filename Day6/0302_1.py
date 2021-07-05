@@ -9,8 +9,8 @@ def key_down(e):    #키를 눌렀을 때 실행되는 함수
     koff = False    #키가 눌리면 koff = False
 
 def key_up(e):  #키를 눌렀다 뗐을 때 실행되는 함수
-    global koff
-    koff = True     #눌렀다 뗐을 때 설정
+    global key
+    key=''     #눌렀다 뗐을 때 설정
 
 DIR_UP = 0              #캐릭터 방향 정의 변수 (위쪽)
 DIR_DOWN = 1            #캐릭터 방향 정의 변수 (아래쪽)
@@ -95,9 +95,9 @@ def main():
     tmr = tmr + 1
     draw_screen()
     move_penpen()           #펜펜 이동
-    if koff == True:        #koff가 True이면 (키를 눌렀다 뗐으면)
-        key = ''            #key symbol 변수 초기화
-        koff = False        #koff를 False로 설정
+    #if koff == True:        #koff가 True이면 (키를 눌렀다 뗐으면)
+    #    key = ''            #key symbol 변수 초기화
+    #    koff = False        #koff를 False로 설정
     root.after(300,main)     #300ms 이후에 main 함수 다시 실행
 
 root = tkinter.Tk()
