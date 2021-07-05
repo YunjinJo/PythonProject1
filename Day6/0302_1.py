@@ -1,3 +1,4 @@
+import random
 import tkinter
 
 #키 입력
@@ -56,6 +57,7 @@ def draw_screen():          #미로 그리기 함수
             canvas.create_image(x*60+30,y*60+30,image=img_bg[map_data[y][x]], tag='SCREEN')   #60x60 이미지 칩의 중심이 (30,30)이므로
     canvas.create_image(pen_x,pen_y,image=img_pen[pen_a],tag='SCREEN') #펜펜 이미지 표시
     draw_txt('SCORE '+str(score),200,30,30,'white')
+    canvas.create_image(red_x,red_y,image=img_red[red_a],tag='SCREEN')
 
 def check_wall(cx, cy, di, dot): #각 방향에 벽 존재 여부 확인 존재하면 True 리턴, (dot인자: 한번에 움직이는 픽셀크기)
     chk = False             #chk 변수에 False 할당
@@ -122,16 +124,39 @@ def move_penpen():
         score = score + 100
         map_data[my][mx] = 2
 
+def move_enemy():   #적 이동 함수
+    global red_a,red_d,red_x,red_y
+    speed = 10  #적 속도 10픽셀
+    if red_x % 60 == 30 and red_y % 60 == 30:   #레드가 정확한 칸 중간에 위치해 있으면
+        red_d = random.randint(0,3)             #randint 함수는 (시작, 끝) 그 사이의 랜덤 정수를 반환한다
+    if red_d == DIR_UP:                         #적이 위쪽을 향할 경우
+        if check_wall(red_x,red_y,red_d,speed) == False:    #해당방향이 벽이 아니라면
+            red_y = red_y - speed
+
+    if red_d == DIR_DOWN:                         #적이 아래쪽을 향할 경우
+        if check_wall(red_x,red_y,red_d,speed) == False:
+            red_y = red_y + speed
+
+    if red_d == DIR_LEFT:                         #적이 왼쪽을 향할 경우
+        if check_wall(red_x,red_y,red_d,speed) == False:
+            red_x = red_x - speed
+
+    if red_d == DIR_RIGHT:                         #적이 오른쪽을 향할 경우
+        if check_wall(red_x,red_y,red_d,speed) == False:
+            red_x = red_x + speed
+    red_a = red_d * 3 + ANIMATION[tmr % 4]
+
 
 def main():
     global key, koff, tmr
     tmr = tmr + 1
     draw_screen()
     move_penpen()           #펜펜 이동
+    move_enemy()            #적 이동
     #if koff == True:        #koff가 True이면 (키를 눌렀다 뗐으면)
     #    key = ''            #key symbol 변수 초기화
     #    koff = False        #koff를 False로 설정
-    root.after(100,main)     #300ms 이후에 main 함수 다시 실행
+    root.after(100,main)     #100ms 이후에 main 함수 다시 실행
 
 root = tkinter.Tk()
 root.title('아슬아슬 펭귄 미로')
@@ -159,7 +184,20 @@ img_pen = [
     tkinter.PhotoImage(file='Chapter3/image_penpen/pen11.png')
 ]    #펜펜 이미지 리스트
 
-
+img_red = [
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red00.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red01.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red02.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red03.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red04.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red05.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red06.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red07.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red08.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red09.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red10.png'),
+    tkinter.PhotoImage(file='Chapter3/image_penpen/red11.png')
+]    #적 이미지 리스트
 
 root.bind('<KeyPress>',key_down)    #키를 눌렀을 때 실행할 함수 key_down 지정
 root.bind('<KeyRelease>',key_up)    #키를 눌렀다 뗐을 때 실행할 함수 key_up 지정
