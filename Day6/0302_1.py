@@ -22,28 +22,48 @@ ANIMATION = [0,1,0,2]   #애니메이션 번호 정의 리스트, 3장의 스프
 tmr = 0     #타이머
 score = 0   #점수
 
-pen_x = 90        #펜펜의 x좌표
-pen_y = 90        #펜펜의 y좌표
+pen_x = 0        #펜펜의 x좌표
+pen_y = 0        #펜펜의 y좌표
 pen_d = 0         #펜펜의 방향
 pen_a = 0         #펜펜의 이미지 번호
 
-red_x = 630
-red_y = 450
+red_x = 0
+red_y = 0
 red_d = 0
 red_a = 0
 
+idx = 0         #인덱스 변수 (게임 진행 관리 0:타이틀 화면, 1: 게임중, 2: 게임오버, 4:스테이지 클리어)
+candy = 0       #각 스테이지에 있는 사탕 수
 
-map_data = [                            #2차원 9행x12열 리스트 미로 데이터 정의
-[0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0],
-[0, 2, 3, 3, 2, 1, 1, 2, 3, 3, 2, 0],
-[0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 3, 0],
-[0, 3, 1, 1, 3, 0, 0, 3, 1, 1, 3, 0],
-[0, 3, 2, 2, 3, 0, 0, 3, 2, 2, 3, 0],
-[0, 3, 0, 0, 3, 1, 1, 3, 0, 0, 3, 0],
-[0, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 0],
-[0, 2, 3, 3, 2, 0, 0, 2, 3, 3, 2, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-]
+map_data = []   #미로 데이터 맵 데이터 정의 리스트
+
+def set_stage():    #스테이지 데이터 설정
+    global map_data, candy
+
+    map_data = [                            #2차원 9행x12열 리스트 미로 데이터 정의
+    [0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0],
+    [0, 2, 3, 3, 2, 1, 1, 2, 3, 3, 2, 0],
+    [0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 3, 0],
+    [0, 3, 1, 1, 3, 0, 0, 3, 1, 1, 3, 0],
+    [0, 3, 2, 2, 3, 0, 0, 3, 2, 2, 3, 0],
+    [0, 3, 0, 0, 3, 1, 1, 3, 0, 0, 3, 0],
+    [0, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 0],
+    [0, 2, 3, 3, 2, 0, 0, 2, 3, 3, 2, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+
+    candy = 32
+
+def set_char_pos():     #캐릭터 시작 위치 설정 함수
+    global pen_x,pen_y,pen_d,pen_a
+    global red_a,red_d,red_x,red_y
+    pen_x, pen_y = 90,90
+    pen_d = DIR_DOWN
+    pen_a = 3
+
+    red_x,red_y = 630,450
+    red_d = DIR_DOWN
+    red_a = 3
 
 def draw_txt(txt,x,y,siz,col): #그림자를 포함해서 문자열(txt)를 (x,y)위치에 siz크기, col 색깔로 표시하는 함수
     fnt = ('Times New Roman', siz, 'bold')  #폰트 정의
@@ -100,7 +120,7 @@ def check_wall(cx, cy, di, dot): #각 방향에 벽 존재 여부 확인 존재�
 
 
 def move_penpen():
-    global pen_x,pen_y, pen_d, pen_a, score
+    global pen_x,pen_y, pen_d, pen_a, score, candy
     if key == 'Up':                                 #key symbol 중에서 'Up' 위쪽 화살표 눌렀을 때
         pen_d = DIR_UP
         if check_wall(pen_x,pen_y,pen_d,20) == False: #위쪽 방향이 벽인지 검사
@@ -123,12 +143,24 @@ def move_penpen():
     if map_data[my][mx] == 3:   #사탕에 닿았는가?
         score = score + 100
         map_data[my][mx] = 2
+        candy -= 1
 
 def move_enemy():   #적 이동 함수
-    global red_a,red_d,red_x,red_y
+    global red_a,red_d,red_x,red_y, idx, tmr
     speed = 10  #적 속도 10픽셀
     if red_x % 60 == 30 and red_y % 60 == 30:   #레드가 정확한 칸 중간에 위치해 있으면
-        red_d = random.randint(0,3)             #randint 함수는 (시작, 끝) 그 사이의 랜덤 정수를 반환한다
+        red_d = random.randint(0,6)             #randint 함수는 (시작, 끝) 그 사이의 랜덤 정수를 반환한다 0,1,2,3,4,5,6
+        #direction 0,1,2,3만 의미가 있다
+        if red_d >= 4:                          #랜덤 넘버가 4 이상이면 red는 penpen을 쫒아간다.
+            if pen_y < red_y:                   #펜펜이 위쪽에 있으면
+                red_d = DIR_UP
+            if pen_y > red_y:                   #펜펜이 아래쪽에 있으면
+                red_d = DIR_DOWN
+            if pen_x < red_x:                   #펜펜이 왼쪽에 있으면
+                red_d = DIR_LEFT
+            if pen_x > red_x:                   #펜펜이 오른쪽에 있으면
+                red_d = DIR_RIGHT
+
     if red_d == DIR_UP:                         #적이 위쪽을 향할 경우
         if check_wall(red_x,red_y,red_d,speed) == False:    #해당방향이 벽이 아니라면
             red_y = red_y - speed
@@ -146,13 +178,43 @@ def move_enemy():   #적 이동 함수
             red_x = red_x + speed
     red_a = red_d * 3 + ANIMATION[tmr % 4]
 
+    if abs(red_x - pen_x) <= 40 and abs(red_y - pen_y) <= 40:   #펜펜과 레드가 부딪히면
+        idx = 2                                                 #게임 종료 idx로 변경
+        tmr = 0
+
 
 def main():
-    global key, koff, tmr
+    global key, koff, tmr, score,idx
     tmr = tmr + 1
     draw_screen()
-    move_penpen()           #펜펜 이동
-    move_enemy()            #적 이동
+
+    if idx == 0:            #idx = 0 타이틀 화면
+        canvas.create_image(360,200,image=img_title,tag='SCREEN')
+        if tmr % 10 < 5:    #(0,1,2,...,9) 중에서 5 미만인 경우
+            draw_txt('Press SPACE !', 360,360,30,'yellow')  #그림자가 있는 텍스트 표시
+        if key == 'space':      #키 space를 누르면
+            score = 0           #score = 0 초기화
+            set_stage()         #스테이지 데이터 초기화 함수 호출
+            set_char_pos()      #캐릭터 위치 초기화 함수 호출
+            idx = 1             #idx = 1 게임 진행으로 변경
+
+    if idx == 1:                #idx=1 게임 진행
+        move_penpen()           #펜펜 이동
+        move_enemy()            #적 이동
+        if candy == 0:          #사탕을 모두 먹으면
+            idx = 4             #idx=4 스테이지 클리어로 변경
+            tmr = 0             #타이머 0으로 초기화
+
+    if idx == 2:                #idx=2 게임 오버
+        draw_txt('GAME OVER',360,270,40,'red')  #그림자 있는 텍스트 표시
+        if tmr == 50:           #5초 후에
+            idx = 0             #idx = 0 타이틀 화면으로 변경
+
+    if idx == 4:                #idx = 4 스테이지 클리어
+        draw_txt('STAGE CLEAR',360,270,40,'pink')
+        if tmr == 50:
+            idx = 0
+
     #if koff == True:        #koff가 True이면 (키를 눌렀다 뗐으면)
     #    key = ''            #key symbol 변수 초기화
     #    koff = False        #koff를 False로 설정
@@ -198,8 +260,10 @@ img_red = [
     tkinter.PhotoImage(file='Chapter3/image_penpen/red10.png'),
     tkinter.PhotoImage(file='Chapter3/image_penpen/red11.png')
 ]    #적 이미지 리스트
-
+img_title = tkinter.PhotoImage(file='Chapter3/image_penpen/title.png')
 root.bind('<KeyPress>',key_down)    #키를 눌렀을 때 실행할 함수 key_down 지정
 root.bind('<KeyRelease>',key_up)    #키를 눌렀다 뗐을 때 실행할 함수 key_up 지정
+set_stage()
+set_char_pos()
 main()
 root.mainloop()
