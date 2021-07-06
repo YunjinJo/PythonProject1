@@ -31,28 +31,66 @@ red_x = 0
 red_y = 0
 red_d = 0
 red_a = 0
+red_sx = 0      #레드의 시작 위치 x좌표
+red_sy = 0      #레드의 시작 위치 y좌표
 
 idx = 0         #인덱스 변수 (게임 진행 관리 0:타이틀 화면, 1: 게임중, 2: 게임오버, 4:스테이지 클리어)
 candy = 0       #각 스테이지에 있는 사탕 수
+stage = 1
 
 map_data = []   #미로 데이터 맵 데이터 정의 리스트
 
 def set_stage():    #스테이지 데이터 설정
     global map_data, candy
+    global red_sx, red_sy
 
-    map_data = [                            #2차원 9행x12열 리스트 미로 데이터 정의
-    [0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0],
-    [0, 2, 3, 3, 2, 1, 1, 2, 3, 3, 2, 0],
-    [0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 3, 0],
-    [0, 3, 1, 1, 3, 0, 0, 3, 1, 1, 3, 0],
-    [0, 3, 2, 2, 3, 0, 0, 3, 2, 2, 3, 0],
-    [0, 3, 0, 0, 3, 1, 1, 3, 0, 0, 3, 0],
-    [0, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 0],
-    [0, 2, 3, 3, 2, 0, 0, 2, 3, 3, 2, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]
+    if stage == 1:      #스테이지 1
+        map_data = [ [0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0],      #2차원 9행x12열 리스트 미로데이터 정의
+                 [0, 2, 3, 3, 2, 1, 1, 2, 3, 3, 2, 0],
+                 [0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 3, 0],
+                 [0, 3, 1, 1, 3, 0, 0, 3, 1, 1, 3, 0],
+                 [0, 3, 2, 2, 3, 0, 0, 3, 2, 2, 3, 0],
+                 [0, 3, 0, 0, 3, 1, 1, 3, 0, 0, 3, 0],
+                 [0, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 0],
+                 [0, 2, 3, 3, 2, 0, 0, 2, 3, 3, 2, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                 ]
+        candy = 32
+        red_sx = 630
+        red_sy = 450
 
-    candy = 32
+    if stage == 2:
+        map_data = [
+            [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+            [0, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 0],
+            [0, 3, 3, 0, 2, 1, 1, 2, 0, 3, 3, 0],
+            [0, 3, 3, 1, 3, 3, 3, 3, 1, 3, 3, 0],
+            [0, 2, 1, 3, 3, 3, 3, 3, 3, 1, 2, 0],
+            [0, 3, 3, 0, 3, 3, 3, 3, 0, 3, 3, 0],
+            [0, 3, 3, 1, 2, 1, 1, 2, 1, 3, 3, 0],
+            [0, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        candy = 38
+        red_sx = 630
+        red_sy = 90
+
+    if stage == 3:
+        map_data = [
+            [0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0],
+            [0, 2, 1, 3, 1, 2, 2, 3, 3, 3, 3, 0],
+            [0, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 0],
+            [0, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 0],
+            [0, 2, 2, 2, 2, 3, 3, 2, 2, 2, 2, 0],
+            [0, 1, 1, 2, 0, 2, 2, 0, 1, 1, 2, 0],
+            [0, 3, 3, 3, 1, 1, 1, 0, 3, 3, 3, 0],
+            [0, 3, 3, 3, 2, 2, 2, 0, 3, 3, 3, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        candy = 23
+        red_sx = 630
+        red_sy = 450
+
 
 def set_char_pos():     #캐릭터 시작 위치 설정 함수
     global pen_x,pen_y,pen_d,pen_a
@@ -61,7 +99,7 @@ def set_char_pos():     #캐릭터 시작 위치 설정 함수
     pen_d = DIR_DOWN
     pen_a = 3
 
-    red_x,red_y = 630,450
+    red_x,red_y = red_sx,red_sy
     red_d = DIR_DOWN
     red_a = 3
 
@@ -78,6 +116,7 @@ def draw_screen():          #미로 그리기 함수
     canvas.create_image(pen_x,pen_y,image=img_pen[pen_a],tag='SCREEN') #펜펜 이미지 표시
     draw_txt('SCORE '+str(score),200,30,30,'white')
     canvas.create_image(red_x,red_y,image=img_red[red_a],tag='SCREEN')
+    draw_txt('STAGE '+str(stage),520,30,30,'lime')
 
 def check_wall(cx, cy, di, dot): #각 방향에 벽 존재 여부 확인 존재하면 True 리턴, (dot인자: 한번에 움직이는 픽셀크기)
     chk = False             #chk 변수에 False 할당
@@ -184,7 +223,7 @@ def move_enemy():   #적 이동 함수
 
 
 def main():
-    global key, koff, tmr, score,idx
+    global key, koff, tmr, score,idx,stage
     tmr = tmr + 1
     draw_screen()
 
@@ -194,6 +233,7 @@ def main():
             draw_txt('Press SPACE !', 360,360,30,'yellow')  #그림자가 있는 텍스트 표시
         if key == 'space':      #키 space를 누르면
             score = 0           #score = 0 초기화
+            stage = 1           #1스테이지로 변경
             set_stage()         #스테이지 데이터 초기화 함수 호출
             set_char_pos()      #캐릭터 위치 초기화 함수 호출
             idx = 1             #idx = 1 게임 진행으로 변경
@@ -211,9 +251,18 @@ def main():
             idx = 0             #idx = 0 타이틀 화면으로 변경
 
     if idx == 4:                #idx = 4 스테이지 클리어
-        draw_txt('STAGE CLEAR',360,270,40,'pink')
-        if tmr == 50:
-            idx = 0
+        if stage < 3:           #스테이지 1, 2 z클리어인 경우
+            draw_txt('STAGE CLEAR', 360, 270,40,'pink') #그림자 있는 텍스트 표시
+        else:
+            draw_txt('ALL STAGE CLEAR',360,270,40,'violet') #그림자 있는 텍스트 표시
+        if tmr == 30:           #3초 후에
+            if stage < 3:       #스테이지 1,2면
+                stage += 1      #tmxpdlwl wmdrk
+                set_stage()
+                set_char_pos()
+                idx = 1         #idx=1 게임 진행으로 변경
+            else:               #ALL STAGE CLEAR인 경우
+                idx = 0         #idx=0 타이틀 화면으로 변경
 
     #if koff == True:        #koff가 True이면 (키를 눌렀다 뗐으면)
     #    key = ''            #key symbol 변수 초기화
