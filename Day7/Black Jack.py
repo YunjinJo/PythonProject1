@@ -67,6 +67,19 @@ class BlackJack:        #클래스 BlackJAck
             self.Lstatus['text'] = 'Sorry you lost!'
             PlaySound('BlackJack Resource/sounds/wrong.wav', SND_FILENAME)
 
+        #변수들을 초기화
+        self.betMoney = 0
+        self.LplayerMoney['text'] = 'You have $'+str(self.playerMoney)
+        self.LbetMoney['text'] = '$'+str(self.betMoney)
+        self.B50.configure(state = 'disabled', bg = 'gray')
+        self.B10.configure(state='disabled', bg='gray')
+        self.B1.configure(state='disabled', bg='gray')
+        self.Hit.configure(state='disabled', bg='gray')
+        self.Stay.configure(state='disabled', bg='gray')
+        self.Deal.configure(state='disabled', bg='gray')
+        self.Again.configure(state='active', bg='white')
+
+
 
     def pressedHit(self):
         self.nCardsPlayer += 1  #플레이어 카드 이미지 라벨의 위치 1 증가
@@ -93,7 +106,25 @@ class BlackJack:        #클래스 BlackJAck
         self.Again['state'] = 'disabled'
         self.Again['bg'] = 'gray'
     def pressedAgain(self):
-        pass
+        #딜러와 플레이어 카드 라벨 이미지 삭제
+        for i in range(self.dealer.inHand()):
+            self.LcardsDealer[i].configure(bg='green',image='')
+        for i in range(self.player.inHand()):
+            self.LcardsPlayer[i].configure(bg='green',image='')
+        self.LcardsDealer.clear()
+        self.LcardsPlayer.clear()
+
+        #점수 라벨, 결과 라벨을 초기화
+        self.LdealerPts['text'] = ''
+        self.LplayerPts['text'] = ''
+        self.Lstatus['text'] = ''
+
+        #버튼 초기화
+        self.B50.configure(state='active', bg='white')
+        self.B10.configure(state='active', bg='white')
+        self.B1.configure(state='active', bg='white')
+        self.Again.configure(state='disabled', bg='gray')
+
 
     def hitPlayer(self,n):  #n: 카드 이미지 라벨 위치 변수
         newCard = Card(self.cardDeck[self.deckN])   #새로운 Card 객체를 cardDeck에서 0..51 랜덤 넘버를 인자로 전달해서 생성
